@@ -20,6 +20,9 @@ export class Pdf {
   @Column()
   path: string;
 
+  @Column({ nullable: true })
+  thumbnailPath: string;
+
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   uploadDate: Date;
 }

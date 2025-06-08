@@ -135,6 +135,36 @@ Content-Type: application/pdf
 Content-Disposition: inline; filename="documento.pdf"
 ```
 
+### 🖼️ Visualizar Thumbnail do PDF
+**GET** `/pdf/thumbnail/{id}`
+
+Retorna a imagem thumbnail (miniatura) da primeira página do PDF.
+
+**Parâmetros:**
+- `id`: ID do PDF (número inteiro)
+
+**Headers de resposta:**
+```
+Content-Type: image/png
+Content-Disposition: inline; filename="arquivo.pdf.png"
+```
+
+### 🔄 Gerar Thumbnail para PDF existente
+**POST** `/pdf/thumbnail/{id}/generate`
+
+Gera ou regenera o thumbnail para um PDF existente.
+
+**Parâmetros:**
+- `id`: ID do PDF (número inteiro)
+
+**Exemplo de resposta:**
+```json
+{
+  "message": "Thumbnail gerado com sucesso para o PDF com ID 1",
+  "thumbnailPath": "uploads/thumbnails/1640995200000-123456789.pdf.png"
+}
+```
+
 ### 🗑️ Excluir PDF por ID
 **DELETE** `/pdf/{id}`
 
@@ -225,3 +255,53 @@ curl -X DELETE http://localhost:3000/pdf/1
   uploadDate: Date;     // Data e hora do upload
 }
 ```
+
+# Configuração do Ambiente para SQLite para Atualizar a Tabelas
+
+## Instalar Chocolatey (se necessário)
+
+Se você ainda não tiver o Chocolatey instalado, execute o seguinte comando no PowerShell como administrador para instalar o Chocolatey:
+
+```bash
+# Instalar Chocolatey (se não tiver)
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+```
+
+## Instalar SQLite
+
+Depois de instalar o Chocolatey, execute o seguinte comando para instalar o SQLite:
+
+```bash
+choco install sqlite
+```
+
+## Configuração do Banco de Dados SQLite
+
+### 1. Criar um script SQL `add-thumbnail-column.sql`
+
+Crie um arquivo SQL chamado `add-thumbnail-column.sql` com o seguinte conteúdo:
+
+```sql
+ALTER TABLE pdf ADD COLUMN thumbnailPath TEXT;
+```
+
+### 2. Executar o script SQL
+
+Você pode executar o script SQL utilizando o SQLite:
+
+```bash
+sqlite3 pdf_database.sqlite < add-thumbnail-column.sql
+```
+
+OU
+
+```bash
+sqlite3 pdf_database.sqlite ".read add-thumbnail-column.sql"
+```
+
+Este comando adicionará a coluna `thumbnailPath` à tabela `pdf` no banco de dados `pdf_database.sqlite`.
+
+## Uso do QueryRunner no Código
+
+Para integrar as alterações no banco de dados com seu código, utilize o `QueryRunner` conforme necessário.

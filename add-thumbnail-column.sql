@@ -1,0 +1,1 @@
+ALTER TABLE pdf ADD COLUMN thumbnailPath TEXT;
