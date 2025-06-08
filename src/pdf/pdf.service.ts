@@ -88,24 +88,28 @@ export class PdfService {
     
     try {
       // Inicializa o PDFNet com a chave de licença
-      await PDFNet.initialize('demo:1749392739433:61caf6de0300000000f9fb759129005e6e760957a9889da9fdc75b85b5');
+      // Importante: Não inicialize o PDFNet se já estiver inicializado
+      try {
+        await PDFNet.initialize('demo:1749392739433:61caf6de0300000000f9fb759129005e6e760957a9889da9fdc75b85b5');
+      } catch (initError) {
+        // Se já estiver inicializado, ignora o erro
+        console.log('PDFNet já inicializado ou erro ao inicializar:', initError.message);
+      }
       
-      const main = async () => {
+      // Usa runWithCleanup que gerencia melhor o ciclo de vida do PDFNet
+      await PDFNet.runWithCleanup(async () => {
         const doc = await PDFNet.PDFDoc.createFromFilePath(inputPath);
         await doc.initSecurityHandler();
         const pdfdraw = await PDFNet.PDFDraw.create(92); // Resolução do thumbnail
         const currPage = await doc.getPage(1); // Primeira página
         await pdfdraw.export(currPage, outputPath, 'PNG');
-      };
-      
-      await PDFNet.runWithCleanup(main);
+      });
       
       return relativeOutputPath;
     } catch (error) {
       console.error('Erro ao gerar thumbnail:', error);
       throw error;
-    } finally {
-      await PDFNet.shutdown();
     }
+    // Removido o shutdown() do finally para evitar problemas com múltiplas chamadas
   }
 }
