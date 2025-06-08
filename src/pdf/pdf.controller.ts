@@ -10,6 +10,7 @@ import {
   Res,
   HttpStatus,
   HttpException,
+  NotFoundException,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
@@ -86,5 +87,47 @@ export class PdfController {
   ): Promise<{ message: string }> {
     await this.pdfService.remove(id);
     return { message: `PDF com ID ${id} removido com sucesso` };
+  }
+
+  // Gera thumbnail para um PDF que já existente;
+  @Post('thumbnail/:id/generate')
+  async generateThumbnail(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<{ message: string; thumbnailPath: string }> {
+    const pdf = await this.pdfService.generateThumbnailForExistingPdf(id);
+    return {
+      message: `Thumbnail gerado com sucesso para o PDF com ID ${id}`,
+      thumbnailPath: pdf.thumbnailPath,
+    };
+  }
+
+  // Retorna o thumbnail de um PDF que já existente;
+  @Get('thumbnail/:id')
+  async getThumbnail(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response,
+  ): Promise<void> {
+    const pdf = await this.pdfService.findOne(id);
+    // Verifica se o PDF tem um thumbnail
+    if (!pdf.thumbnailPath) {
+      throw new NotFoundException('Thumbnail não disponível para este PDF');
+    }
+    // Verifica se o arquivo existe no sistema de arquivos
+    if (!existsSync(join(process.cwd(), pdf.thumbnailPath))) {
+      throw new HttpException(
+        'Thumbnail não encontrado no servidor',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    // Configura os headers para exibição da imagem
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader(
+      'Content-Disposition',
+      `inline; filename="${pdf.filename}.png"`,
+    );
+
+    // Envia o arquivo como stream
+    const fileStream = createReadStream(join(process.cwd(), pdf.thumbnailPath));
+    fileStream.pipe(res);
   }
 }
