@@ -81,7 +81,7 @@ Content-Type: multipart/form-data
 ```
 
 **Body (form-data):**
-- `files`: Arquivos PDF (máximo 10 arquivos, 10MB cada)
+- `files`: Arquivos PDF (máximo 10 arquivos, 7MB cada)
 
 **Exemplo de resposta:**
 ```json
