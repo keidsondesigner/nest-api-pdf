@@ -89,14 +89,25 @@ Content-Type: multipart/form-data
   "message": "2 arquivo(s) PDF enviado(s) com sucesso",
   "pdfs": [
     {
-      "id": 1,
-      "filename": "1640995200000-123456789.pdf",
-      "originalname": "documento.pdf",
-      "mimetype": "application/pdf",
-      "size": 6024567,
-      "path": "./uploads/1640995200000-123456789.pdf",
-      "uploadDate": "2024-01-01T10:00:00.000Z"
-    }
+        "id": 16,
+        "filename": "1749395875362-40128619.pdf",
+        "originalname": "ebook-angular.pdf",
+        "mimetype": "application/pdf",
+        "size": 5691691,
+        "path": "uploads\\1749395875362-40128619.pdf",
+        "thumbnailPath": "uploads\\thumbnails\\1749395875362-40128619.pdf.png",
+        "uploadDate": "2025-06-08T15:17:56.000Z"
+    },
+    {
+        "id": 17,
+        "filename": "1749395875383-24604960.pdf",
+        "originalname": "ebook-nextjs.pdf",
+        "mimetype": "application/pdf",
+        "size": 3127674,
+        "path": "uploads\\1749395875383-24604960.pdf",
+        "thumbnailPath": "uploads\\thumbnails\\1749395875383-24604960.pdf.png",
+        "uploadDate": "2025-06-08T15:17:56.000Z"
+    },
   ]
 }
 ```
@@ -110,14 +121,25 @@ Retorna lista de todos os PDFs armazenados.
 ```json
 [
   {
-    "id": 1,
-    "filename": "1640995200000-123456789.pdf",
-    "originalname": "documento.pdf",
-    "mimetype": "application/pdf",
-    "size": 424567,
-    "path": "./uploads/1640995200000-123456789.pdf",
-    "uploadDate": "2024-01-01T10:00:00.000Z"
-  }
+        "id": 16,
+        "filename": "1749395875362-40128619.pdf",
+        "originalname": "ebook-angular.pdf",
+        "mimetype": "application/pdf",
+        "size": 5691691,
+        "path": "uploads\\1749395875362-40128619.pdf",
+        "thumbnailPath": "uploads\\thumbnails\\1749395875362-40128619.pdf.png",
+        "uploadDate": "2025-06-08T15:17:56.000Z"
+    },
+    {
+        "id": 17,
+        "filename": "1749395875383-24604960.pdf",
+        "originalname": "ebook-nextjs.pdf",
+        "mimetype": "application/pdf",
+        "size": 3127674,
+        "path": "uploads\\1749395875383-24604960.pdf",
+        "thumbnailPath": "uploads\\thumbnails\\1749395875383-24604960.pdf.png",
+        "uploadDate": "2025-06-08T15:17:56.000Z"
+    },
 ]
 ```
 
@@ -253,6 +275,7 @@ curl -X DELETE http://localhost:3000/pdf/1
   size: number;         // Tamanho em bytes
   path: string;         // Caminho do arquivo no servidor
   uploadDate: Date;     // Data e hora do upload
+  thumbnailPath?: string; // Caminho para a miniatura do PDF (opcional)
 }
 ```
 
