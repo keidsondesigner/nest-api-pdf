@@ -110,6 +110,5 @@ export class PdfService {
       console.error('Erro ao gerar thumbnail:', error);
       throw error;
     }
-    // Removido o shutdown() do finally para evitar problemas com múltiplas chamadas
   }
 }

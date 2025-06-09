@@ -46,6 +46,6 @@ export const multerConfig: multer.Options = {
     callback(null, true);
   },
   limits: {
-    fileSize: 7 * 1024 * 1024, // Limite de 10MB por arquivo
+    fileSize: 7 * 1024 * 1024, // Limite de 7MB por arquivo
   },
 };

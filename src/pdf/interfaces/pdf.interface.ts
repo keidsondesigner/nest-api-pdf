@@ -6,4 +6,5 @@ export interface IPdf {
   mimetype: string;
   size: number;
   uploadDate: Date;
+  thumbnailPath?: string;
 }
